@@ -16,7 +16,7 @@ Not every decision should go through an LLM. This demo keeps cheap, testable Pyt
 
 - FastAPI web UI with example technical, billing, and general questions
 - Deterministic guardrail that blocks unsafe password / payment-card requests
-- Keyword router that selects a technical, billing, or general specialist
+- Keyword router that can select one specialist or several for mixed questions
 - Specialist agents with scoped prompts and a demo billing policy
 - Reviewer agent that checks the draft for clarity, safety, and over-promising
 - Execution trace shown in the UI so you can see each harness step
@@ -30,9 +30,7 @@ question
 guardrail ──blocked──► refusal (end)
    │
    ▼
-router ──technical──► technical agent ──┐
-        ──billing────► billing agent ────┼──► reviewer ──► final answer
-        ──general────► general agent ────┘
+router ── one or more matches ──► specialist(s) ──► reviewer ──► final answer
 ```
 
 | Step | File | What it does |
@@ -42,7 +40,7 @@ router ──technical──► technical agent ──┐
 | HTTP API + UI server | `app.py` | FastAPI app on port `8080` |
 | Browser UI | `templates/index.html`, `static/` | Chat form, route badge, harness trace |
 
-Routing is keyword-based on purpose. If the question looks technical (`error`, `login`, `api`, …) it goes to the technical agent. Billing words (`price`, `refund`, `plan`, …) go to billing. Everything else goes to general support.
+Routing is keyword-based on purpose, and it collects **every** match. A mixed question such as an API error plus a refund request plus “what can support help with?” runs the technical, billing, and general agents, then the reviewer merges the drafts. That keeps billing policy on the billing agent instead of letting the technical agent invent prices.
 
 ## Requirements
 
@@ -91,6 +89,7 @@ Open [http://127.0.0.1:8080](http://127.0.0.1:8080).
 - Technical: `I am getting an API login error. How can I fix it?`
 - Billing: `How much is the Pro plan and can I get a refund?`
 - General: `What can your support team help me with?`
+- Mixed: `I am getting an API login error. How can I fix it? How much is the Pro plan and can I get a refund? What can your support team help me with?`
 
 Demo billing policy used by the billing agent:
 

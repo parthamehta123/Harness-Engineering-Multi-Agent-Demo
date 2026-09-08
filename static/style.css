@@ -149,6 +149,9 @@ textarea:focus {
     font-size: 13px;
     font-weight: 700;
     text-transform: capitalize;
+    text-align: right;
+    max-width: 70%;
+    white-space: normal;
 }
 
 .answer {

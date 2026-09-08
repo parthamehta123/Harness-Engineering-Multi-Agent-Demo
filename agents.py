@@ -25,6 +25,8 @@ Your job:
 - Explain the solution in very simple steps.
 - Never invent account-specific information.
 - If important information is missing, clearly say what the user should check.
+- Only answer the technical parts of the question.
+- Do not invent prices, refunds, plans, or company policy.
 
 Customer question:
 {question}
@@ -51,6 +53,7 @@ Demo company policy:
 Customer question:
 {question}
 
+Only answer the billing parts of the question.
 Answer clearly and safely using only the policy above.
 """
     return llm.invoke(prompt).content
@@ -64,8 +67,8 @@ def general_agent(question: str) -> str:
 You are a General Customer Support Agent.
 
 Answer general questions politely and simply.
-If the question requires technical support or billing support, say that it should
-be handled by the appropriate specialist.
+Only answer the general parts of the question, such as what support can help with.
+Do not invent prices, refunds, or technical troubleshooting steps.
 
 Customer question:
 {question}
@@ -91,6 +94,8 @@ Check the draft answer for:
 
 Rewrite the answer if needed.
 Keep the final answer concise and beginner-friendly.
+If the draft has labeled specialist sections, merge them into one reply.
+Keep billing facts only from the billing section. Do not invent prices.
 
 Original customer question:
 {question}
